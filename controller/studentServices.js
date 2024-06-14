@@ -1,35 +1,35 @@
-const studentModel = require("../models/studentModel");
-const slugify = require("slugify");
-const asyncHandler = require("express-async-handler");
-const apiError = require("../utils/apiError");
-const ApiFeatures = require("../utils/apiFeatures");
-const factory = require("./factoryHandlers");
-const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
+const studentModel = require('../models/studentModel');
+const slugify = require('slugify');
+const asyncHandler = require('express-async-handler');
+const apiError = require('../utils/apiError');
+const ApiFeatures = require('../utils/apiFeatures');
+const factory = require('./factoryHandlers');
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 const createToken = (payload) =>
   jwt.sign({ studentId: payload }, process.env.JWT_SECRET_KEY, {
     expiresIn: process.env.JWT_EXPIRE_TIME,
   });
 
-const multer = require("multer");
-const { v4: uuidv4 } = require("uuid");
-const sharp = require("sharp");
-const { uploadSingleImage } = require("../middleWares/uploadImageMiddleware");
+const multer = require('multer');
+const { v4: uuidv4 } = require('uuid');
+const sharp = require('sharp');
+const { uploadSingleImage } = require('../middleWares/uploadImageMiddleware');
 
 //upload single image
-exports.uploadStudentImage = uploadSingleImage("profileImage");
+exports.uploadStudentImage = uploadSingleImage('profileImage');
 //image processing
 exports.resizeImage = asyncHandler(async (req, res, next) => {
   const filename = `student-${uuidv4()}-${Date.now()}.jpeg`;
-  if(req.file){
+  if (req.file) {
     await sharp(req.file.buffer)
-    .resize(500, 500)
-    .toFormat("jpeg")
-    .jpeg({ quality: 90 })
-    .toFile(`uploads/Students/${filename}`);
+      .resize(500, 500)
+      .toFormat('jpeg')
+      .jpeg({ quality: 90 })
+      .toFile(`uploads/Students/${filename}`);
 
-  //save image into our db
-  req.body.profileImage = filename;
+    //save image into our db
+    req.body.profileImage = filename;
   }
   next();
 });
@@ -71,7 +71,7 @@ exports.getAllStudent = asyncHandler(async (req, res) => {
 
   res.status(200).json({
     results: students.length,
-    status: "success",
+    status: 'success',
     paginationResult,
     data: students,
   });
@@ -121,7 +121,7 @@ exports.changeStudentPassword = asyncHandler(async (req, res, next) => {
 // @route   GET /api/v1/student/getMe
 // @access  Private/Protect
 exports.getLoggedStuData = asyncHandler(async (req, res, next) => {
-  req.params.id = req.student._id
+  req.params.id = req.student._id;
   next();
 });
 
@@ -145,9 +145,7 @@ exports.updateLoggedStuPassword = asyncHandler(async (req, res, next) => {
   const token = createToken(student._id);
 
   res.status(200).json({ data: student, token });
-
 });
-
 
 // @desc    Update logged student data (without password, role)
 // @route   PUT /api/v1/student/updateMe
@@ -159,11 +157,11 @@ exports.updateLoggedStuData = asyncHandler(async (req, res, next) => {
       name: req.body.name,
       email: req.body.email,
       phone: req.body.phone,
-      profileImage : req.body.profileImage
+      profileImage: req.body.profileImage,
     },
     { new: true }
-     );
-   console.log(req.student._id)
+  );
+  console.log(req.student._id);
 
   res.status(200).json({ data: student });
 });

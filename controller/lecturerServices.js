@@ -1,37 +1,37 @@
-const lecturerModel = require("../models/lecturerModel");
-const asyncHandler = require("express-async-handler");
-const ApiError = require("../utils/apiError");
-const ApiFeatures = require("../utils/apiFeatures");
-const factory = require("./factoryHandlers");
-const jwt = require("jsonwebtoken");
-const bcrypt = require("bcryptjs");
+const lecturerModel = require('../models/lecturerModel');
+const asyncHandler = require('express-async-handler');
+const ApiError = require('../utils/apiError');
+const ApiFeatures = require('../utils/apiFeatures');
+const factory = require('./factoryHandlers');
+const jwt = require('jsonwebtoken');
+const bcrypt = require('bcryptjs');
 
-const coursesModel=require('../models/coursesModel')
+const coursesModel = require('../models/coursesModel');
 
 const createToken = (payload) =>
   jwt.sign({ lecturerId: payload }, process.env.JWT_SECRET_KEY, {
     expiresIn: process.env.JWT_EXPIRE_TIME,
   });
 
-const multer = require("multer");
-const { v4: uuidv4 } = require("uuid");
-const sharp = require("sharp");
-const { uploadSingleImage } = require("../middleWares/uploadImageMiddleware");
+const multer = require('multer');
+const { v4: uuidv4 } = require('uuid');
+const sharp = require('sharp');
+const { uploadSingleImage } = require('../middleWares/uploadImageMiddleware');
 
 //upload single image
-exports.uploadLecturerImage = uploadSingleImage("profileImage");
+exports.uploadLecturerImage = uploadSingleImage('profileImage');
 //image processing
 exports.resizeImage = asyncHandler(async (req, res, next) => {
   const filename = `lecturer-${uuidv4()}-${Date.now()}.jpeg`;
-  if(req.file){
+  if (req.file) {
     await sharp(req.file.buffer)
-    .resize(500, 500)
-    .toFormat("jpeg")
-    .jpeg({ quality: 90 })
-    .toFile(`uploads/Students/lecturers/${filename}`);
+      .resize(500, 500)
+      .toFormat('jpeg')
+      .jpeg({ quality: 90 })
+      .toFile(`uploads/Students/lecturers/${filename}`);
 
-  //save image into our db
-  req.body.profileImage = filename;
+    //save image into our db
+    req.body.profileImage = filename;
   }
   next();
 });
@@ -63,7 +63,7 @@ exports.getAllLecturer = asyncHandler(async (req, res) => {
   res.status(200).json({
     results: lecturers.length,
     paginationResult,
-    status: "success",
+    status: 'success',
     data: lecturers,
   });
 });
@@ -114,7 +114,7 @@ exports.changeLecturerPassword = asyncHandler(async (req, res, next) => {
 // @route   GET /api/v1/lecturer/getMe
 // @access  Private/Protect
 exports.getLoggedLecData = asyncHandler(async (req, res, next) => {
-  req.params.id = req.lecturer._id
+  req.params.id = req.lecturer._id;
   next();
 });
 
@@ -122,19 +122,18 @@ exports.getLoggedLecData = asyncHandler(async (req, res, next) => {
 // @route   PUT /api/v1/lecturer/updateMe
 // @access  Private/Protect
 exports.updateLoggedLecData = asyncHandler(async (req, res, next) => {
-  const lecturer = await lecturerModel.findByIdAndUpdate( req.lecturer._id ,
+  const lecturer = await lecturerModel.findByIdAndUpdate(
+    req.lecturer._id,
     {
-      email : req.body.email,
-      name : req.body.name,
-      phone : req.body.phone,
-      profileImage : req.body.profileImage
-
+      email: req.body.email,
+      name: req.body.name,
+      phone: req.body.phone,
+      profileImage: req.body.profileImage,
     },
     {
       new: true,
     }
   );
-
 
   res.status(200).json({ data: lecturer });
 });
@@ -161,8 +160,6 @@ exports.updateLoggedLecPassword = asyncHandler(async (req, res, next) => {
   res.status(200).json({ data: lecturer, token });
 });
 
-
-
 // @desc    Deactivate logged lecturer
 // @route   DELETE /api/v1/lecturer/deleteMe
 // @access  Private/Protect
@@ -172,7 +169,6 @@ exports.deleteLoggedLecData = asyncHandler(async (req, res, next) => {
   res.status(204).json({ status: 'Success' });
 });
 
-
 exports.getCoursessForLecturer = asyncHandler(async (req, res) => {
   const lecturerId = req.params.id;
 
@@ -181,10 +177,6 @@ exports.getCoursessForLecturer = asyncHandler(async (req, res) => {
 
   res.status(200).json({
     success: true,
-    data: courses
+    data: courses,
   });
 });
-
-
-       
-

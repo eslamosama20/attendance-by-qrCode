@@ -1,12 +1,9 @@
-const express = require("express");
+const express = require('express');
 const router = express.Router({ mergeParams: true });
 
-const authServicesForLec = require("../controller/authServicesForLec");
-const authServicesForStu = require("../controller/authServicesForStu");
-const coursesRoute=require('./coursesRouts')
-
-
-
+const authServicesForLec = require('../controller/authServicesForLec');
+const authServicesForStu = require('../controller/authServicesForStu');
+const coursesRoute = require('./coursesRouts');
 
 const {
   getLecturerValidator,
@@ -15,8 +12,8 @@ const {
   deleteLecturerValidator,
   changeLecturerPasswordValidator,
   changeLoggedLecValidator,
-  updateLoggedLecValidator
-} = require("../utils/validators/lecturerValidator");
+  updateLoggedLecValidator,
+} = require('../utils/validators/lecturerValidator');
 
 const {
   getAllLecturer,
@@ -35,41 +32,49 @@ const {
   updateLoggedLecPassword,
   updateLoggedLecData,
   deleteLoggedLecData,
-  getCoursessForLecturer
-} = require("../controller/lecturerServices");
+  getCoursessForLecturer,
+} = require('../controller/lecturerServices');
 
 //router.use("/:lecturerId/courses", coursesRoute);
 
-
 router.get('/lecturer_courses/:id', getCoursessForLecturer);
 
-router.get('/getme' ,authServicesForLec.protect, getLoggedLecData , getLecturer)
-router.put('/changeMyPassword' ,authServicesForLec.protect,changeLoggedLecValidator, updateLoggedLecPassword )
+router.get('/getme', authServicesForLec.protect, getLoggedLecData, getLecturer);
+router.put(
+  '/changeMyPassword',
+  authServicesForLec.protect,
+  changeLoggedLecValidator,
+  updateLoggedLecPassword
+);
 router.put(
   '/updateMe',
   authServicesForLec.protect,
   uploadLecturerImage,
   resizeImage,
   updateLoggedLecValidator,
-  updateLoggedLecData );
-router.delete('/deleteMe',authServicesForLec.protect,deleteLoggedLecData );
+  updateLoggedLecData
+);
+router.delete('/deleteMe', authServicesForLec.protect, deleteLoggedLecData);
 
 router.put(
-  "/changePassword/:id",
+  '/changePassword/:id',
   authServicesForLec.protect,
- authServicesForLec.allowedTo("admin"),
- changeLecturerPasswordValidator,
- changeLecturerPassword
+  authServicesForLec.allowedTo('admin'),
+  changeLecturerPasswordValidator,
+  changeLecturerPassword
 );
 
-
 router
-  .route("/")
-  .get(authServicesForLec.protect,
-    authServicesForLec.allowedTo("admin"),createFilterObj, getAllLecturer)
+  .route('/')
+  .get(
+    authServicesForLec.protect,
+    authServicesForLec.allowedTo('admin'),
+    createFilterObj,
+    getAllLecturer
+  )
   .post(
     authServicesForLec.protect,
-    authServicesForLec.allowedTo("admin"),
+    authServicesForLec.allowedTo('admin'),
     uploadLecturerImage,
     resizeImage,
     setCoursesIDToBody,
@@ -77,24 +82,41 @@ router
     createLecturer
   );
 router
-  .route("/:id")
-  .get(authServicesForLec.protect,
-    authServicesForLec.allowedTo("admin"),getLecturerValidator, getLecturer)
+  .route('/:id')
+  .get(
+    authServicesForLec.protect,
+    authServicesForLec.allowedTo('admin'),
+    getLecturerValidator,
+    getLecturer
+  )
   .put(
     authServicesForLec.protect,
-    authServicesForLec.allowedTo("admin"),
+    authServicesForLec.allowedTo('admin'),
     uploadLecturerImage,
     resizeImage,
     updateLecturerValidator,
     updateSpecificLecturer
   )
-  .delete(authServicesForLec.protect,
-    authServicesForLec.allowedTo("admin"),deleteLecturerValidator, deleteSpecificLecturer);
+  .delete(
+    authServicesForLec.protect,
+    authServicesForLec.allowedTo('admin'),
+    deleteLecturerValidator,
+    deleteSpecificLecturer
+  );
 router
-  .route("/CoursesForLecturer/:id")
-  .get(authServicesForLec.protect,
-    authServicesForLec.allowedTo("admin"),getLecturerValidator, getCoursesForLecturer);
+  .route('/CoursesForLecturer/:id')
+  .get(
+    authServicesForLec.protect,
+    authServicesForLec.allowedTo('admin'),
+    getLecturerValidator,
+    getCoursesForLecturer
+  );
 
-router.route("/search/:keyword").get(authServicesForLec.protect,
-  authServicesForLec.allowedTo("admin"),searchForLecturer);
+router
+  .route('/search/:keyword')
+  .get(
+    authServicesForLec.protect,
+    authServicesForLec.allowedTo('admin'),
+    searchForLecturer
+  );
 module.exports = router;

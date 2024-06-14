@@ -1,7 +1,6 @@
-const express = require("express");
+const express = require('express');
 
-
-const authServicesForLec = require("../controller/authServicesForLec");
+const authServicesForLec = require('../controller/authServicesForLec');
 
 const {
   createCourses,
@@ -10,17 +9,17 @@ const {
   deleteSpecificCourses,
   updateSpecificCourses,
   searchForCourses,
-} = require("../controller/coursesServices");
+} = require('../controller/coursesServices');
 const {
   createCoursesValidator,
   getCoursesValidator,
   updateCoursesValidator,
   deleteCoursesValidator,
-} = require("../utils/validators/coursesValidator");
+} = require('../utils/validators/coursesValidator');
 
 // mergeparams : allow us to access prarmeters onother routers
-const studentRoute = require("./studentRouts");
-const lecturerRoute = require("./lecturerRouts");
+const studentRoute = require('./studentRouts');
+const lecturerRoute = require('./lecturerRouts');
 
 //mergeParams: allow us to access parameter on other route
 const router = express.Router({ mergeParams: true });
@@ -29,29 +28,46 @@ const router = express.Router({ mergeParams: true });
 //router.use("/:coursesId/lecturer", lecturerRoute);
 
 router
-  .route("/")
+  .route('/')
   .post(
     authServicesForLec.protect,
-    authServicesForLec.allowedTo("admin","manager"),
+    authServicesForLec.allowedTo('admin', 'manager'),
     createCoursesValidator,
     createCourses
   )
-
-  .get(authServicesForLec.protect,
-    authServicesForLec.allowedTo("admin","manager","user"),getAllCourses);
+  .get(
+    authServicesForLec.protect,
+    authServicesForLec.allowedTo('admin', 'manager', 'user'),
+    getAllCourses
+  );
 
 router
-  .route("/:id")
-  .get(authServicesForLec.protect,
-    authServicesForLec.allowedTo("admin","manager","user"),getCoursesValidator, getCourses)
-  .put(authServicesForLec.protect,
-    authServicesForLec.allowedTo("admin","manager"),updateCoursesValidator, updateSpecificCourses)
-  .delete(authServicesForLec.protect,
-    authServicesForLec.allowedTo("admin","manager"),deleteCoursesValidator, deleteSpecificCourses);
+  .route('/:id')
+  .get(
+    authServicesForLec.protect,
+    authServicesForLec.allowedTo('admin', 'manager', 'user'),
+    getCoursesValidator,
+    getCourses
+  )
+  .put(
+    authServicesForLec.protect,
+    authServicesForLec.allowedTo('admin', 'manager'),
+    updateCoursesValidator,
+    updateSpecificCourses
+  )
+  .delete(
+    authServicesForLec.protect,
+    authServicesForLec.allowedTo('admin', 'manager'),
+    deleteCoursesValidator,
+    deleteSpecificCourses
+  );
 
-router.route("/search/:keyword").get(authServicesForLec.protect,
-  authServicesForLec.allowedTo("admin","manager"),searchForCourses);
-
-
+router
+  .route('/search/:keyword')
+  .get(
+    authServicesForLec.protect,
+    authServicesForLec.allowedTo('admin', 'manager'),
+    searchForCourses
+  );
 
 module.exports = router;

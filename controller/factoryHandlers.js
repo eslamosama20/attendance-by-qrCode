@@ -1,6 +1,6 @@
-const asyncHandler = require("express-async-handler");
-const ApiError = require("../utils/apiError");
-const ApiFeatures = require("../utils/apiFeatures");
+const asyncHandler = require('express-async-handler');
+const ApiError = require('../utils/apiError');
+const ApiFeatures = require('../utils/apiFeatures');
 
 exports.deleteOne = (model) =>
   asyncHandler(async (req, res, next) => {
@@ -10,7 +10,7 @@ exports.deleteOne = (model) =>
       return next(new ApiError(`no object for this ${id}`, 404));
     }
     res.status(200).json({
-      status: "success",
+      status: 'success',
       data: doc,
     });
   });
@@ -22,7 +22,7 @@ exports.getOne = (model) =>
       return next(new ApiError(`no id name for this ${id}`, 404));
     }
     res.status(200).json({
-      status: "success",
+      status: 'success',
       data: doc,
     });
   });
@@ -37,10 +37,11 @@ exports.updateOne = (model) =>
     }
 
     res.status(200).json({
-      status: "success",
+      status: 'success',
       data: doc,
     });
   });
+
 exports.createOne = (model) =>
   asyncHandler(async (req, res) => {
     // const name =req.body.name;
@@ -48,32 +49,34 @@ exports.createOne = (model) =>
     // async&await
     const doc = await model.create(req.body);
     res.status(201).json({
-      status: "success",
+      status: 'success',
       data: doc,
     });
   });
+  
 exports.search = (model) =>
   asyncHandler(async (req, res) => {
     const query = await model.find({
       $or: [
-        { name: { $regex: req.params.keyword, $options: "i" } },
-        { programme: { $regex: req.params.keyword, $options: "i" } },
+        { name: { $regex: req.params.keyword, $options: 'i' } },
+        { programme: { $regex: req.params.keyword, $options: 'i' } },
       ],
     });
     res.status(200).json({
-      status: "success",
+      status: 'success',
       result: query.length,
       data: {
         query,
       },
     });
   });
+
 exports.coursesForOne = (model) =>
   asyncHandler(async (req, res, next) => {
     const id = req.params.id;
     const doc = await model
       .findById(id)
-      .populate({ path: "courses", select: "name -_id" });
+      .populate({ path: 'courses', select: 'name -_id' });
 
     if (!doc) {
       // res.status(404).json({
@@ -82,7 +85,7 @@ exports.coursesForOne = (model) =>
       return next(new ApiError(`no Lecturer for this ${id}`, 404));
     }
     res.status(200).json({
-      status: "success",
+      status: 'success',
       data: doc.courses,
     });
   });

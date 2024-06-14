@@ -1,9 +1,9 @@
-const coursesModel = require("../models/coursesModel");
-const slugify = require("slugify");
-const asyncHandler = require("express-async-handler");
-const ApiError = require("../utils/apiError");
-const ApiFeatures = require("../utils/apiFeatures");
-const factory = require("./factoryHandlers");
+const coursesModel = require('../models/coursesModel');
+const slugify = require('slugify');
+const asyncHandler = require('express-async-handler');
+const ApiError = require('../utils/apiError');
+const ApiFeatures = require('../utils/apiFeatures');
+const factory = require('./factoryHandlers');
 
 // exports.setStudentIDToBody=(req,res,next)=>{
 //     if(!req.body.student) req.body.student=req.params.studentId
@@ -29,7 +29,10 @@ exports.createFilterObj = (req, res, next) => {
 // @ access public
 exports.getAllCourses = asyncHandler(async (req, res) => {
   const countDocuments = await coursesModel.countDocuments();
-  const apiFeatures = new ApiFeatures(coursesModel.find(req.filterObj), req.query)
+  const apiFeatures = new ApiFeatures(
+    coursesModel.find(req.filterObj),
+    req.query
+  )
     .paginate()
     //.populate({path:'courses',select:'name -_id'})
     .filter()
@@ -38,13 +41,13 @@ exports.getAllCourses = asyncHandler(async (req, res) => {
     .sort();
   //execute query
 
-  console.log(req.params.lecturerId)
+  console.log(req.params.lecturerId);
   const { mongooseQuery, paginationResult } = apiFeatures;
   const courses = await mongooseQuery;
   res.status(200).json({
     results: courses.length,
     paginationResult,
-    status: "success",
+    status: 'success',
     data: courses,
   });
 });

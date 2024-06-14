@@ -18,7 +18,8 @@
   },
   "scripts": {
     "start:dev": "nodemon server.js",
-    "start:prod": "set NODE_ENV=production && node server.js"
+    "start:prod": "set NODE_ENV=production && node server.js",
+    "start": "nodemon server.JS"
   },
   "name": "nodejs-attendance-marking-using-qrcode-master-api-v",
   "version": "1.0.0",
