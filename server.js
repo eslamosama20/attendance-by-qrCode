@@ -13,7 +13,6 @@ const attendanceRouts = require('./routs/attendanceRouts');
 
 const ApiError = require('./utils/apiError');
 
-const qrRoute = require('./routs/qrRoute');
 
 const lecturerRouts = require('./routs/lecturerRouts');
 const globalError = require('./middleWares/errorMiddleWare');
@@ -37,7 +36,6 @@ app.use('/api/v1/lecture', lectureRouter);
 app.use('/api/v1/authLec', authRoutsForLec);
 app.use('/api/v1/authStu', authRoutsForStu);
 app.use('/api/v1/attendance', attendanceRouts);
-app.use('/api/v1/qr', qrRoute);
 
 app.all('*', (req, res, next) => {
   // create error and send it to error handling middleWare
