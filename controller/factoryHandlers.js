@@ -11,7 +11,7 @@ exports.deleteOne = (model) =>
     }
     res.status(200).json({
       status: 'success',
-      data: doc,
+      "msg": "course is deleted successfully",
     });
   });
 exports.getOne = (model) =>
@@ -38,7 +38,7 @@ exports.updateOne = (model) =>
 
     res.status(200).json({
       status: 'success',
-      data: doc,
+      "msg":"course is updated successfully",
     });
   });
 
@@ -71,21 +71,3 @@ exports.search = (model) =>
     });
   });
 
-exports.coursesForOne = (model) =>
-  asyncHandler(async (req, res, next) => {
-    const id = req.params.id;
-    const doc = await model
-      .findById(id)
-      .populate({ path: 'courses', select: 'name -_id' });
-
-    if (!doc) {
-      // res.status(404).json({
-      //     msg:'this category not found!'
-      // })
-      return next(new ApiError(`no Lecturer for this ${id}`, 404));
-    }
-    res.status(200).json({
-      status: 'success',
-      data: doc.courses,
-    });
-  });

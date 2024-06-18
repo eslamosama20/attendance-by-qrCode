@@ -1,32 +1,32 @@
-const lecturerModel = require('../models/lecturerModel');
-const asyncHandler = require('express-async-handler');
-const ApiError = require('../utils/apiError');
-const ApiFeatures = require('../utils/apiFeatures');
-const factory = require('./factoryHandlers');
-const jwt = require('jsonwebtoken');
-const bcrypt = require('bcryptjs');
+const lecturerModel = require("../models/lecturerModel");
+const asyncHandler = require("express-async-handler");
+const ApiError = require("../utils/apiError");
+const ApiFeatures = require("../utils/apiFeatures");
+const factory = require("./factoryHandlers");
+const jwt = require("jsonwebtoken");
+const bcrypt = require("bcryptjs");
 
-const coursesModel = require('../models/coursesModel');
+const coursesModel = require("../models/coursesModel");
 
 const createToken = (payload) =>
   jwt.sign({ lecturerId: payload }, process.env.JWT_SECRET_KEY, {
     expiresIn: process.env.JWT_EXPIRE_TIME,
   });
 
-const multer = require('multer');
-const { v4: uuidv4 } = require('uuid');
-const sharp = require('sharp');
-const { uploadSingleImage } = require('../middleWares/uploadImageMiddleware');
+const multer = require("multer");
+const { v4: uuidv4 } = require("uuid");
+const sharp = require("sharp");
+const { uploadSingleImage } = require("../middleWares/uploadImageMiddleware");
 
 //upload single image
-exports.uploadLecturerImage = uploadSingleImage('profileImage');
+exports.uploadLecturerImage = uploadSingleImage("profileImage");
 //image processing
 exports.resizeImage = asyncHandler(async (req, res, next) => {
   const filename = `lecturer-${uuidv4()}-${Date.now()}.jpeg`;
   if (req.file) {
     await sharp(req.file.buffer)
       .resize(500, 500)
-      .toFormat('jpeg')
+      .toFormat("jpeg")
       .jpeg({ quality: 90 })
       .toFile(`uploads/Students/lecturers/${filename}`);
 
@@ -63,7 +63,7 @@ exports.getAllLecturer = asyncHandler(async (req, res) => {
   res.status(200).json({
     results: lecturers.length,
     paginationResult,
-    status: 'success',
+    status: "success",
     data: lecturers,
   });
 });
@@ -76,13 +76,6 @@ exports.createLecturer = factory.createOne(lecturerModel);
 // @ access public
 exports.getLecturer = factory.getOne(lecturerModel);
 
-// @desc get specificBy id Lecturer to view his courses
-// @route /api/v1/Lecturercourses/:id
-// @ access public
-exports.getCoursesForLecturer = factory.coursesForOne(lecturerModel);
-// @desc update specificBy id student
-// @route /api/v1/student/:id
-// @ access private
 
 exports.updateSpecificLecturer = factory.updateOne(lecturerModel);
 
@@ -166,14 +159,16 @@ exports.updateLoggedLecPassword = asyncHandler(async (req, res, next) => {
 exports.deleteLoggedLecData = asyncHandler(async (req, res, next) => {
   await lecturerModel.findByIdAndUpdate(req.lecturer._id, { active: false });
 
-  res.status(204).json({ status: 'Success' });
+  res.status(204).json({ status: "Success" });
 });
 
-exports.getCoursessForLecturer = asyncHandler(async (req, res) => {
+exports.getCoursesForLecturer = asyncHandler(async (req, res) => {
   const lecturerId = req.params.id;
 
-  // استرجاع الدورس المرتبطة بمعرف الدكتور
-  const courses = await coursesModel.find({ lecturerId });
+  // استرجاع الكورسات المرتبطة بمعرف الدكتور
+  const courses = await coursesModel
+    .find({ lecturerId: lecturerId }) // البحث عن الكورسات التي تحتوي على lecturerId
+    .select("name -_id"); // اختيار أسماء الكورسات فقط
 
   res.status(200).json({
     success: true,

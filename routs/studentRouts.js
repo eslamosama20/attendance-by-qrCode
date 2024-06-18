@@ -14,7 +14,6 @@ const {
 } = require('../utils/validators/studentValidator');
 
 const {
-  getCoursesForStudent,
   getAllStudent,
   createStudent,
   getStudent,
@@ -30,10 +29,13 @@ const {
   updateLoggedStuPassword,
   updateLoggedStuData,
   deleteLoggedStuData,
+  getCoursesForStudent
 } = require('../controller/studentServices');
-const router = express.Router({ mergeParams: true });
+// const router = express.Router({ mergeParams: true });
 
-router.use('/:studentId/courses', coursesRoute);
+// router.use('/:studentId/courses', coursesRoute);
+const router = express.Router();
+
 
 router.get('/getme', authServicesForStu.protect, getLoggedStuData, getStudent);
 router.put(

@@ -27,8 +27,8 @@ const lecturerSchema = new mongoose.Schema(
     passwordChangedAt: Date,
     role: {
       type: String,
-      enum: ['user', 'admin', 'manager'],
-      default: 'admin',
+      enum: ['student', 'admin', 'manager'],
+      default: 'manager',
     },
     passwordRessetCode: String,
     passwordRessetExpires: Date,
@@ -43,12 +43,12 @@ const lecturerSchema = new mongoose.Schema(
       required: [true, 'programme is required'],
     },
 
-    // courses: [
-    //   {
-    //     type: mongoose.Schema.ObjectId,
-    //     ref: 'course',
-    //   },
-    // ],
+    courses: [
+      {
+        type: mongoose.Schema.ObjectId,
+        ref: 'course',
+      },
+    ],
   },
 
   { timestamps: true }

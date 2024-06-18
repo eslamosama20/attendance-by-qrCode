@@ -8,7 +8,7 @@ exports.addNewLecture = catchAsync(async (req, res, next) => {
   if (!lectureTitle || !lectureNumber || !course) {
     return next(
       new apiError(
-        'please enter  lectureTitle, lectureDay,lectureNumber, lectureDuration, lectureTime, course',
+        'please enter  lectureTitle,lectureNumber, course',
         400
       )
     );
@@ -65,7 +65,7 @@ exports.updateLecture = catchAsync(async (req, res, next) => {
   if (!lecture) return next(new apiError('this lecture does not exist', 404));
   res.status(200).json({
     data: {
-      updatedLecture: lecture,
+      "msg": "lecture is updated successfully",
     },
   });
 });

@@ -18,11 +18,13 @@ const {
 } = require('../utils/validators/coursesValidator');
 
 // mergeparams : allow us to access prarmeters onother routers
-const studentRoute = require('./studentRouts');
-const lecturerRoute = require('./lecturerRouts');
+// const studentRoute = require('./studentRouts');
+// const lecturerRoute = require('./lecturerRouts');
 
 //mergeParams: allow us to access parameter on other route
-const router = express.Router({ mergeParams: true });
+// const router = express.Router({ mergeParams: true });
+const router = express.Router();
+
 
 //router.use("/:coursesId/student", studentRoute);
 //router.use("/:coursesId/lecturer", lecturerRoute);

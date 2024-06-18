@@ -4,6 +4,10 @@ const bcrypt = require('bcryptjs');
 // 1-create schema
 const studentSchema = new mongoose.Schema(
   {
+    studentid: {
+      type: mongoose.Schema.Types.ObjectId,
+      unique: true,
+    },
     name: {
       type: String,
       required: [true, 'name is required'],

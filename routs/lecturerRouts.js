@@ -1,9 +1,9 @@
 const express = require('express');
-const router = express.Router({ mergeParams: true });
+// const router = express.Router({ mergeParams: true });
+
+const router = express.Router();
 
 const authServicesForLec = require('../controller/authServicesForLec');
-const authServicesForStu = require('../controller/authServicesForStu');
-const coursesRoute = require('./coursesRouts');
 
 const {
   getLecturerValidator,
@@ -32,12 +32,13 @@ const {
   updateLoggedLecPassword,
   updateLoggedLecData,
   deleteLoggedLecData,
-  getCoursessForLecturer,
 } = require('../controller/lecturerServices');
 
 //router.use("/:lecturerId/courses", coursesRoute);
 
-router.get('/lecturer_courses/:id', getCoursessForLecturer);
+router.get('/lecturer_courses/:id', authServicesForLec.protect,
+  authServicesForLec.allowedTo('admin'),
+  getLecturerValidator,getCoursesForLecturer);
 
 router.get('/getme', authServicesForLec.protect, getLoggedLecData, getLecturer);
 router.put(
@@ -103,14 +104,14 @@ router
     deleteLecturerValidator,
     deleteSpecificLecturer
   );
-router
-  .route('/CoursesForLecturer/:id')
-  .get(
-    authServicesForLec.protect,
-    authServicesForLec.allowedTo('admin'),
-    getLecturerValidator,
-    getCoursesForLecturer
-  );
+// router
+//   .route('/CoursesForLecturer/:id')
+//   .get(
+//     authServicesForLec.protect,
+//     authServicesForLec.allowedTo('admin'),
+//     getLecturerValidator,
+//     getCoursesForLecturer
+//   );
 
 router
   .route('/search/:keyword')

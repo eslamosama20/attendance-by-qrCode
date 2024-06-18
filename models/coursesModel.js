@@ -6,7 +6,7 @@ const coursesSchema = new mongoose.Schema(
       type: String,
       required: [true, 'name is required'],
       unique: [true, 'the name must be unique'],
-      minLength: [3, 'name must be at least 3 characters'],
+      minLength: [2, 'name must be at least 3 characters'],
       maxLength: [100, 'name is too long'],
     },
 

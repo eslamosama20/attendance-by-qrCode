@@ -87,8 +87,35 @@ exports.getStudent = factory.getOne(studentModel);
 // @desc get specificBy id student to view his courses
 // @route /api/v1/studentcourses/:id
 // @ access public
-exports.getCoursesForStudent = factory.coursesForOne(studentModel);
-// @desc update specificBy id student
+exports.getCoursesForStudent = asyncHandler(async (req, res) => {
+  const studentId = req.params.id;
+
+  // التحقق من صحة ObjectId
+  
+
+  // استرجاع الطالب باستخدام معرف الطالب
+  const student = await studentModel
+    .findById(studentId)
+    .populate({ path: "courses", select: "name -_id" }); // جلب أسماء الكورسات فقط
+
+  // التحقق مما إذا كان الطالب موجود
+  if (!student) {
+    return res.status(404).json({
+      success: false,
+      message: "Student not found",
+    });
+  }
+
+  // جلب أسماء الكورسات فقط
+  const courses = student.courses.map(course => ({
+    name: course.name,
+  }));
+
+  res.status(200).json({
+    success: true,
+    data: courses,
+  });
+});// @desc update specificBy id student
 // @route /api/v1/student/:id
 // @ access private
 

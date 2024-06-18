@@ -103,7 +103,7 @@ exports.allowedTo = (...roles) =>
   
 exports.forgetPassword = asyncHandler(async (req, res, next) => {
   // get user by email
-  const foundStudent = await student.findOne(req.body);
+  const foundStudent = await student.findOne({ email: req.body.email });
   if (!foundStudent) {
     return next(
       new ApiError(`there is not user with this email : ${req.body.email}`, 404)
