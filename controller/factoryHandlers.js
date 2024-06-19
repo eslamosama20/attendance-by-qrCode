@@ -70,4 +70,37 @@ exports.search = (model) =>
       },
     });
   });
+   // Assuming you have an ApiError class defined
+
+exports.coursesForOneOnDay = (model) =>
+    asyncHandler(async (req, res, next) => {
+        const lecturerId = req.params.id;
+        const lectureDay = req.params.lectureDay;
+
+        if (!lecturerId || !lectureDay) {
+            return next(new ApiError('Lecturer ID and lecture day are required', 400));
+        }
+
+        console.log(`Fetching courses for lecturer ID: ${lecturerId} on day: ${lectureDay}`);
+
+        try {
+            const courses = await model.find({ lecturerId, lectureDay });
+
+            if (!courses || courses.length === 0) {
+                console.log(`No courses found for lecturer ID: ${lecturerId} on day: ${lectureDay}`);
+                return next(new ApiError(`No courses found for lecturer with id ${lecturerId} on day ${lectureDay}`, 404));
+            }
+
+            console.log(`Courses found: ${courses}`);
+
+            res.status(200).json({
+                status: 'success',
+                data: courses,
+            });
+        } catch (error) {
+            console.error(`Error fetching courses for lecturer ID: ${lecturerId}`, error);
+            return next(new ApiError(`Error fetching courses for lecturer with id ${lecturerId}`, 500));
+        }
+    });
+
 

@@ -71,3 +71,4 @@ exports.updateSpecificCourses = factory.updateOne(coursesModel);
 exports.deleteSpecificCourses = factory.deleteOne(coursesModel);
 
 exports.searchForCourses = factory.search(coursesModel);
+exports.coursesForOneOnDay= factory.coursesForOneOnDay(coursesModel);

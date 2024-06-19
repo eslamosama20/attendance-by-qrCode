@@ -9,6 +9,7 @@ const {
   deleteSpecificCourses,
   updateSpecificCourses,
   searchForCourses,
+  coursesForOneOnDay
 } = require('../controller/coursesServices');
 const {
   createCoursesValidator,
@@ -70,6 +71,13 @@ router
     authServicesForLec.protect,
     authServicesForLec.allowedTo('admin', 'manager'),
     searchForCourses
+  );
+  router
+  .route('/:id/:lectureDay')
+  .get(
+    authServicesForLec.protect,
+    authServicesForLec.allowedTo('admin', 'manager'),
+  coursesForOneOnDay
   );
 
 module.exports = router;
