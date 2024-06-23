@@ -6,6 +6,7 @@ const {
   getAllLectures,
   getLectureById,
   deleteLecture,
+  
 } = require('./../controller/lectureController');
 
 const router = express.Router();
@@ -19,5 +20,8 @@ router
   .get(protect, allowedTo('admin', 'manager'), getLectureById)
   .patch(protect, allowedTo('admin', 'manager'), updateLecture)
   .delete(protect, allowedTo('admin', 'manager'), deleteLecture);
+
+
+  
 
 module.exports = router;

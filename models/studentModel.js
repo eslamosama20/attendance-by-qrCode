@@ -46,6 +46,10 @@ const studentSchema = new mongoose.Schema(
       type: String,
       required: [true, 'programme is required'],
     },
+    level: {
+      type: String,
+      required: [true, 'level is required'],
+    },
     courses: [
       {
         type: mongoose.Schema.ObjectId,

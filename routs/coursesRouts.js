@@ -9,7 +9,9 @@ const {
   deleteSpecificCourses,
   updateSpecificCourses,
   searchForCourses,
-  coursesForOneOnDay
+  coursesForOneOnDay,
+  
+  
 } = require('../controller/coursesServices');
 const {
   createCoursesValidator,
@@ -79,5 +81,28 @@ router
     authServicesForLec.allowedTo('admin', 'manager'),
   coursesForOneOnDay
   );
+  router.get('/:id/lectures', async (req, res) => {
+    try {
+      const courseId = req.params.id; // استخراج معرف الكورس من معلمة الطريق
+      if (!courseId) {
+        return res.status(400).json({
+          status: 'fail',
+          message: 'Course ID parameter is required',
+        });
+      }
+  
+      const lectures = await courseService.getLecturesByCourseId(courseId); // استخدام خدمة للحصول على المحاضرات
+      res.status(200).json({
+        status: 'success',
+        data: lectures,
+      });
+    } catch (error) {
+      res.status(400).json({
+        status: 'fail',
+        message: error.message,
+      });
+    }
+  });
+  
 
 module.exports = router;
