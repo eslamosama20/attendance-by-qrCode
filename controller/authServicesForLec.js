@@ -28,7 +28,7 @@ exports.login = asyncHandler(async (req, res, next) => {
     !foundLecturer ||
     !(await bcrypt.compare(req.body.password, foundLecturer.password))
   ) {
-    return next(new ApiError('Invalid email or password', 401));
+    return next(new ApiError('Invalid email or password', 200));
   }
   // genrate token
   const token = createToken(foundLecturer._id);

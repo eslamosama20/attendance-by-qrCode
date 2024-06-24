@@ -104,8 +104,8 @@ router
 router
   .route('/CoursesForStudent/:id')
   .get(
-    authServicesForLec.protect,
-    authServicesForLec.allowedTo('admin', 'manager'),
+    authServicesForStu.protect,
+    authServicesForStu.allowedTo('admin', 'manager',"student"),
     getStudentValidator,
     getCoursesForStudent
   );
