@@ -27,9 +27,9 @@ exports.login = asyncHandler(async (req, res, next) => {
   if (
     !foundStudent ||
     !(await bcrypt.compare(req.body.password, foundStudent.password))
-  ) {
-    return next(new ApiError('Invalid email or password', 200));
-  }
+  ) return res.status(401).json({ message: 'incorrect email or password' ,data:null
+    
+  });
   // genrate token
   const token = createToken(foundStudent._id);
   // send response to client

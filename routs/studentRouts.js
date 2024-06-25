@@ -1,7 +1,7 @@
-const express = require('express');
-const authServicesForStu = require('../controller/authServicesForStu');
-const authServicesForLec = require('../controller/authServicesForLec');
-const coursesRoute = require('./coursesRouts');
+const express = require("express");
+const authServicesForStu = require("../controller/authServicesForStu");
+const authServicesForLec = require("../controller/authServicesForLec");
+const coursesRoute = require("./coursesRouts");
 
 const {
   getStudentValidator,
@@ -11,7 +11,7 @@ const {
   changeStudentPasswordValidator,
   changeLoggedStuValidator,
   updateLoggedStuDataValidator,
-} = require('../utils/validators/studentValidator');
+} = require("../utils/validators/studentValidator");
 
 const {
   getAllStudent,
@@ -29,50 +29,49 @@ const {
   updateLoggedStuPassword,
   updateLoggedStuData,
   deleteLoggedStuData,
-  getCoursesForStudent
-} = require('../controller/studentServices');
+  getCoursesForStudent,
+} = require("../controller/studentServices");
 // const router = express.Router({ mergeParams: true });
 
 // router.use('/:studentId/courses', coursesRoute);
 const router = express.Router();
 
-
-router.get('/getme', authServicesForStu.protect, getLoggedStuData, getStudent);
+router.get("/getme", authServicesForStu.protect, getLoggedStuData, getStudent);
 router.put(
-  '/changeMyPassword',
+  "/changeMyPassword",
   authServicesForStu.protect,
   changeLoggedStuValidator,
   updateLoggedStuPassword
 );
 router.put(
-  '/updateMe',
+  "/updateMe",
   authServicesForStu.protect,
   uploadStudentImage,
   resizeImage,
   updateLoggedStuDataValidator,
   updateLoggedStuData
 );
-router.delete('/deleteMe', authServicesForStu.protect, deleteLoggedStuData);
+router.delete("/deleteMe", authServicesForStu.protect, deleteLoggedStuData);
 
 router.put(
-  '/changePassword/:id',
+  "/changePassword/:id",
   authServicesForLec.protect,
-  authServicesForLec.allowedTo('admin'),
+  authServicesForLec.allowedTo("admin"),
   changeStudentPasswordValidator,
   changeStudentPassword
 );
 
 router
-  .route('/')
+  .route("/")
   .get(
     authServicesForLec.protect,
-    authServicesForLec.allowedTo('admin', 'manager'),
+    authServicesForLec.allowedTo("admin", "manager"),
     createFilterObj,
     getAllStudent
   )
   .post(
     authServicesForLec.protect,
-    authServicesForLec.allowedTo('admin', 'manager'),
+    authServicesForLec.allowedTo("admin", "manager"),
     uploadStudentImage,
     resizeImage,
     setCoursesIDToBody,
@@ -80,16 +79,16 @@ router
     createStudent
   );
 router
-  .route('/:id')
+  .route("/:id")
   .get(
     authServicesForLec.protect,
-    authServicesForLec.allowedTo('admin', 'manager'),
+    authServicesForLec.allowedTo("admin", "manager"),
     getStudentValidator,
     getStudent
   )
   .put(
     authServicesForLec.protect,
-    authServicesForLec.allowedTo('admin', 'manager'),
+    authServicesForLec.allowedTo("admin", "manager"),
     uploadStudentImage,
     resizeImage,
     updateStudentValidator,
@@ -97,24 +96,24 @@ router
   )
   .delete(
     authServicesForLec.protect,
-    authServicesForLec.allowedTo('admin', 'manager'),
+    authServicesForLec.allowedTo("admin", "manager"),
     deleteStudentValidator,
     deleteSpecificStudent
   );
 router
-  .route('/CoursesForStudent/:id')
+  .route("/CoursesForStudent/:id")
   .get(
     authServicesForStu.protect,
-    authServicesForStu.allowedTo('admin', 'manager',"student"),
+    authServicesForStu.allowedTo("admin", "manager", "student"),
     getStudentValidator,
     getCoursesForStudent
   );
 
 router
-  .route('/search/:keyword')
+  .route("/search/:keyword")
   .get(
     authServicesForStu.protect,
-    authServicesForStu.allowedTo('admin', 'manager'),
+    authServicesForStu.allowedTo("admin", "manager"),
     searchForStudent
   );
 module.exports = router;

@@ -1,6 +1,8 @@
 const express = require('express');
 
 const authServicesForLec = require('../controller/authServicesForLec');
+const authServicesForStu = require('../controller/authServicesForStu');
+
 
 const {
   createCourses,
@@ -42,15 +44,23 @@ router
   )
   .get(
     authServicesForLec.protect,
-    authServicesForLec.allowedTo('admin', 'manager', 'user'),
+    authServicesForLec.allowedTo('admin', 'manager'),
     getAllCourses
-  );
+  )
+  router
+  .route('/studentView')
+  .get(
+    authServicesForStu.protect,
+    authServicesForStu.allowedTo('admin', 'manager',"student"),
+    getAllCourses
+  )
+    
 
 router
   .route('/:id')
   .get(
     authServicesForLec.protect,
-    authServicesForLec.allowedTo('admin', 'manager', 'user'),
+    authServicesForLec.allowedTo('admin', 'manager'),
     getCoursesValidator,
     getCourses
   )
