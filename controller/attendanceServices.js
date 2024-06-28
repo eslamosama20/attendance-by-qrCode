@@ -99,16 +99,16 @@ exports.takeAttendance = catchAsync(async (req, res, next) => {
 
   // generate qr code  :
 
-  // const qrData = `${courseId}${lectureId}`;
-  // const qrCode = await qrGenerator(qrData);
+  const qrData = `${courseId}${lectureId}`;
+  const qrCode = await qrGenerator(qrData);
 
   // sending response to the client
   res.status(201).json({
     status: 'success',
     message: 'you can display qr code for students now',
-    // data: {
-    //   qrCode,
-    // },
+    data: {
+      qrCode,
+    },
   });
 });
 
@@ -213,17 +213,47 @@ exports.getLectureAttendance = catchAsync(async (req, res, next) => {
 
 // 5) get student attendance in specific course :
 
-exports.getStudentAttendanceInCourse = catchAsync(async (req, res, next) => {
+exports.getStudentAttendanceInCourse = asyncHandler(async (req, res, next) => {
   const { courseId } = req.params;
   const studentId = req.student._id;
-  const studentAttendance = await Attendance.find({
+
+  // احصل على الكورس المحدد وتحقق من وجوده
+  const course = await Course.findById(courseId).populate('lectures');
+  if (!course) {
+    return res.status(404).json({
+      status: 'fail',
+      message: 'Course not found',
+    });
+  }
+
+  // احصل على حالة حضور الطالب لكل محاضرة
+  const attendanceRecords = await Attendance.find({
     courseId,
     studentId,
   }).select('lectureNumber status');
+
+  // إنشاء خريطة لحالة حضور الطالب لكل محاضرة
+  const attendanceMap = {};
+  attendanceRecords.forEach(record => {
+    attendanceMap[record.lectureNumber] = record.status;
+  });
+
+  // إنشاء النتيجة النهائية
+  const studentAttendance = course.lectures.map(lecture => ({
+    lectureNumber: lecture.lectureNumber,
+    status: attendanceMap[lecture.lectureNumber] || 'Absent', // تعيين الحالة إلى 'Absent' إذا لم يكن هناك سجل
+  }));
+
+  // حساب نسبة الحضور
+  const totalLectures = course.lectures.length;
+  const attendedLectures = studentAttendance.filter(att => att.status === 'present').length;
+  const attendancePercentage = (attendedLectures / totalLectures) * 100;
+
   res.status(200).json({
     status: 'success',
     data: {
       studentAttendance,
+      attendancePercentage: attendancePercentage.toFixed(2), // لتنسيق النسبة إلى رقم عشري ثابت
     },
   });
 });

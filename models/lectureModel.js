@@ -10,10 +10,10 @@ const lectureSchema = new mongoose.Schema({
     type: Number,
     required: true,
   },
-  // course: {
-  //   type: mongoose.Types.ObjectId,
-  //   ref: 'course',
-  // },
+  course: {
+    type: mongoose.Types.ObjectId,
+    ref: 'course',
+  },
   attendanceRecorded: Boolean,
 });
 
