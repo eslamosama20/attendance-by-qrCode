@@ -99,16 +99,16 @@ exports.takeAttendance = catchAsync(async (req, res, next) => {
 
   // generate qr code  :
 
-  const qrData = `${courseId}${lectureId}`;
-  const qrCode = await qrGenerator(qrData);
+  // const qrData = `${courseId}${lectureId}`;
+  // const qrCode = await qrGenerator(qrData);
 
   // sending response to the client
   res.status(201).json({
     status: 'success',
     message: 'you can display qr code for students now',
-    data: {
-      qrCode,
-    },
+    // data: {
+    //   qrCode,
+    // },
   });
 });
 
