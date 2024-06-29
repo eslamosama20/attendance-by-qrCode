@@ -44,14 +44,14 @@ router
   )
   .get(
     authServicesForLec.protect,
-    authServicesForLec.allowedTo('admin', 'manager'),
+    authServicesForLec.allowedTo('admin'),
     getAllCourses
   )
   router
   .route('/studentView')
   .get(
     authServicesForStu.protect,
-    authServicesForStu.allowedTo('admin', 'manager',"student"),
+    authServicesForStu.allowedTo("student"),
     getAllCourses
   )
     
@@ -72,7 +72,7 @@ router
   )
   .delete(
     authServicesForLec.protect,
-    authServicesForLec.allowedTo('admin', 'manager'),
+    authServicesForLec.allowedTo('admin'),
     deleteCoursesValidator,
     deleteSpecificCourses
   );
@@ -81,14 +81,14 @@ router
   .route('/search/:keyword')
   .get(
     authServicesForLec.protect,
-    authServicesForLec.allowedTo('admin', 'manager'),
+    authServicesForLec.allowedTo('admin'),
     searchForCourses
   );
   router
   .route('/:id/:lectureDay')
   .get(
     authServicesForLec.protect,
-    authServicesForLec.allowedTo('admin', 'manager'),
+    authServicesForLec.allowedTo('manager'),
   coursesForOneOnDay
   );
   router.get('/:id/lectures', async (req, res) => {

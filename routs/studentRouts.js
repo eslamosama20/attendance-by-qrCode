@@ -65,13 +65,13 @@ router
   .route("/")
   .get(
     authServicesForLec.protect,
-    authServicesForLec.allowedTo("admin", "manager"),
+    authServicesForLec.allowedTo("admin"),
     createFilterObj,
     getAllStudent
   )
   .post(
     authServicesForLec.protect,
-    authServicesForLec.allowedTo("admin", "manager"),
+    authServicesForLec.allowedTo("admin"),
     uploadStudentImage,
     resizeImage,
     setCoursesIDToBody,
@@ -82,13 +82,13 @@ router
   .route("/:id")
   .get(
     authServicesForLec.protect,
-    authServicesForLec.allowedTo("admin", "manager"),
+    authServicesForLec.allowedTo("admin"),
     getStudentValidator,
     getStudent
   )
   .put(
     authServicesForLec.protect,
-    authServicesForLec.allowedTo("admin", "manager"),
+    authServicesForLec.allowedTo("admin"),
     uploadStudentImage,
     resizeImage,
     updateStudentValidator,
@@ -96,7 +96,7 @@ router
   )
   .delete(
     authServicesForLec.protect,
-    authServicesForLec.allowedTo("admin", "manager"),
+    authServicesForLec.allowedTo("admin"),
     deleteStudentValidator,
     deleteSpecificStudent
   );
@@ -104,7 +104,7 @@ router
   .route("/CoursesForStudent/:id")
   .get(
     authServicesForStu.protect,
-    authServicesForStu.allowedTo("admin", "manager", "student"),
+    authServicesForStu.allowedTo("admin","student"),
     getStudentValidator,
     getCoursesForStudent
   );
@@ -113,7 +113,7 @@ router
   .route("/search/:keyword")
   .get(
     authServicesForStu.protect,
-    authServicesForStu.allowedTo("admin", "manager"),
+    authServicesForStu.allowedTo("admin"),
     searchForStudent
   );
 module.exports = router;

@@ -27,45 +27,45 @@ exports.addNewLecture = catchAsync(async (req, res, next) => {
   });
 });
 
-exports.getAllLectures = catchAsync(async (req, res, next) => {
-  const lectures = await Lecture.find();
-  res.status(200).json({
-    data: {
-      lectures,
-    },
-  });
-});
+// exports.getAllLectures = catchAsync(async (req, res, next) => {
+//   const lectures = await Lecture.find();
+//   res.status(200).json({
+//     data: {
+//       lectures,
+//     },
+//   });
+// });
 
-exports.getLectureById = catchAsync(async (req, res, next) => {
-  const { id } = req.params;
+// exports.getLectureById = catchAsync(async (req, res, next) => {
+//   const { id } = req.params;
 
-  const lecture = await Lecture.findById(id);
-  if (!lecture) return next(new apiError('this lecture does not exist', 404));
-  res.status(200).json({
-    data: {
-      lecture,
-    },
-  });
-});
+//   const lecture = await Lecture.findById(id);
+//   if (!lecture) return next(new apiError('this lecture does not exist', 404));
+//   res.status(200).json({
+//     data: {
+//       lecture,
+//     },
+//   });
+// });
 
-exports.deleteLecture = catchAsync(async (req, res, next) => {
-  const { id } = req.params;
+// exports.deleteLecture = catchAsync(async (req, res, next) => {
+//   const { id } = req.params;
 
-  const lecture = await Lecture.findByIdAndDelete(id);
-  if (!lecture) return next(new apiError('this lecture does not exist', 404));
-  res.status(200).json({
-    data: null,
-  });
-});
+//   const lecture = await Lecture.findByIdAndDelete(id);
+//   if (!lecture) return next(new apiError('this lecture does not exist', 404));
+//   res.status(200).json({
+//     data: null,
+//   });
+// });
 
-exports.updateLecture = catchAsync(async (req, res, next) => {
-  const { id } = req.params;
+// exports.updateLecture = catchAsync(async (req, res, next) => {
+//   const { id } = req.params;
 
-  const lecture = await Lecture.findByIdAndUpdate(id, req.body, { new: true });
-  if (!lecture) return next(new apiError('this lecture does not exist', 404));
-  res.status(200).json({
-    data: {
-      "msg": "lecture is updated successfully",
-    },
-  });
-});
+//   const lecture = await Lecture.findByIdAndUpdate(id, req.body, { new: true });
+//   if (!lecture) return next(new apiError('this lecture does not exist', 404));
+//   res.status(200).json({
+//     data: {
+//       "msg": "lecture is updated successfully",
+//     },
+//   });
+// });

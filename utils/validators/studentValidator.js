@@ -89,9 +89,9 @@ exports.deleteStudentValidator = [
   validatorMiddleWare,
 ];
 exports.changeStudentPasswordValidator = [
-  check('currentPassword')
-    .notEmpty()
-    .withMessage('you must enter currentPassword'),
+  // check('currentPassword')
+  //   .notEmpty()
+  //   .withMessage('you must enter currentPassword'),
 
   check('confirmPassword')
     .notEmpty()

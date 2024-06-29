@@ -13,13 +13,13 @@ const router = express.Router();
 
 router
   .route('/')
-  .get(protect, allowedTo('admin', 'manager'), getAllLectures)
-  .post(protect, allowedTo('admin', 'manager'), addNewLecture);
+  // .get(protect, allowedTo('manager'), getAllLectures)
+  .post(protect, allowedTo('manager'), addNewLecture);
 router
   .route('/:id')
-  .get(protect, allowedTo('admin', 'manager'), getLectureById)
-  .patch(protect, allowedTo('admin', 'manager'), updateLecture)
-  .delete(protect, allowedTo('admin', 'manager'), deleteLecture);
+  // .get(protect, allowedTo('admin', 'manager'), getLectureById)
+  // .patch(protect, allowedTo('admin', 'manager'), updateLecture)
+  // .delete(protect, allowedTo('admin', 'manager'), deleteLecture);
 
 
   

@@ -26,7 +26,7 @@ const router = express.Router({ mergeParams: true });
 router.post(
   "/takeAttendance/:courseId/:lectureId",
   authServicesForLec.protect,
-  authServicesForLec.allowedTo("admin", "manager"),
+  authServicesForLec.allowedTo("manager"),
   takeAttendance
 );
 
@@ -35,7 +35,7 @@ router.post(
 router.post(
   "/viewCourseAttendance/:courseId",
   authServicesForLec.protect,
-  authServicesForLec.allowedTo("admin", "manager"),
+  authServicesForLec.allowedTo("manager"),
   getCourseAttendance
 );
 
@@ -44,7 +44,7 @@ router.post(
 router.post(
   "/viewLectureAttendance/:lectureId",
   authServicesForLec.protect,
-  authServicesForLec.allowedTo("admin", "manager"),
+  authServicesForLec.allowedTo("manager"),
   getLectureAttendance
 );
 
@@ -59,7 +59,7 @@ router.post(
 
 // 5) get student attendance in specific course 'used by students only'
 
-router.post(
+router.get(
   "/getStudentAttendance/:courseId",
   authServicesForStudent.protect,
   authServicesForStudent.allowedTo("student"),
