@@ -37,8 +37,8 @@ const {
 //router.use("/:lecturerId/courses", coursesRoute);
 
 router.get('/lecturer_courses/:id', 
-  // authServicesForLec.protect,
-  // authServicesForLec.allowedTo('admin',"manager"),
+  authServicesForLec.protect,
+  authServicesForLec.allowedTo('admin',"manager"),
   getLecturerValidator,getCoursesForLecturer);
 
 router.get('/getme', authServicesForLec.protect, getLoggedLecData, getLecturer);
