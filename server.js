@@ -1,8 +1,12 @@
-const express = require('express');
+// const express = require('express');
 const dotenv = require('dotenv');
 const morgan = require('morgan');
 const mongoose = require('mongoose');
-var cors =require("cors")
+const cors = require('cors');
+const fs = require('fs');
+const https = require('https');
+const helmet = require('helmet');
+
 dotenv.config({ path: 'config.env' });
 const dbConnection = require('./config/database');
 const studentRouts = require('./routs/studentRouts');
@@ -11,26 +15,26 @@ const lectureRouter = require('./routs/lectureRoutes');
 const authRoutsForLec = require('./routs/authRoutsForLec');
 const authRoutsForStu = require('./routs/authRoutsForStu');
 const attendanceRouts = require('./routs/attendanceRouts');
-
 const ApiError = require('./utils/apiError');
-
-
 const lecturerRouts = require('./routs/lecturerRouts');
 const globalError = require('./middleWares/errorMiddleWare');
 
-// connection DB
+// Connection to DB
 dbConnection();
 
-// express app
+// Express app
 const app = express();
-// middleWares
 app.use(cors());
+app.use(helmet()); // استخدام helmet لضبط إعدادات الأمان
+
+// Middlewares
 app.use(express.json());
 if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'));
   console.log(`mode : ${process.env.NODE_ENV}`);
 }
-// mount routes
+
+// Mount routes
 app.use('/api/v1/student', studentRouts);
 app.use('/api/v1/courses', coursesRouts);
 app.use('/api/v1/lecturer', lecturerRouts);
@@ -40,25 +44,32 @@ app.use('/api/v1/authStu', authRoutsForStu);
 app.use('/api/v1/attendance', attendanceRouts);
 
 app.all('*', (req, res, next) => {
-  // create error and send it to error handling middleWare
-  // const err =new Error(`can't find this route ${req.originalUrl}`)
   next(new ApiError(`can't find this route ${req.originalUrl}`, 400));
 });
-// global error handling middleWare
+
+// Global error handling middleware
 app.use(globalError);
 
 const PORT = process.env.PORT || 3000;
 
-app.listen(PORT, () => {
-  console.log(`server started at port ${PORT}`);
-});
-// events ===> list ===> callback(err)
-// unhandledRejection outside express
-process.on('unhandledRejection', (err) => {
-  console.log(`unhandledRejection : ${err.name}|${err.message}`);
-  server.close(() => {
-    console.log('shutDown');
+// Load SSL certificates
+const sslOptions = {
+  key: fs.readFileSync('path/to/your/private-key.pem'),
+  cert: fs.readFileSync('path/to/your/certificate.pem')
+};
 
+// Create HTTPS server
+const server = https.createServer(sslOptions, app);
+
+server.listen(PORT, () => {
+  console.log(`Server started at https://localhost:${PORT}`);
+});
+
+// Handle unhandledRejection outside Express
+process.on('unhandledRejection', (err) => {
+  console.log(`unhandledRejection: ${err.name} | ${err.message}`);
+  server.close(() => {
+    console.log('Shutdown');
     process.exit(1);
   });
 });
