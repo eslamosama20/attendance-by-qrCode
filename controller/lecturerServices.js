@@ -168,7 +168,6 @@ exports.getCoursesForLecturer = asyncHandler(async (req, res) => {
   // استرجاع الكورسات المرتبطة بمعرف الدكتور
   const courses = await coursesModel
     .find({ lecturerId: lecturerId }) // البحث عن الكورسات التي تحتوي على lecturerId
-    .select("name -_id"); // اختيار أسماء الكورسات فقط
 
   res.status(200).json({
     success: true,

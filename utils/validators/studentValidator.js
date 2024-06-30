@@ -108,13 +108,13 @@ exports.changeStudentPasswordValidator = [
           throw new Error('There is no user for the provided id');
         }
 
-        const isCorrect = await bcrypt.compare(
-          req.body.currentPassword,
-          studentInstance.password
-        );
-        if (!isCorrect) {
-          throw new Error('Incorrect Current Password');
-        }
+        // const isCorrect = await bcrypt.compare(
+        //   req.body.currentPassword,
+        //   studentInstance.password
+        // );
+        // if (!isCorrect) {
+        //   throw new Error('Incorrect Current Password');
+        // }
 
         // 2) Verify confirm password
         if (val !== req.body.confirmPassword) {
