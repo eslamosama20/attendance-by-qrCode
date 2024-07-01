@@ -98,19 +98,26 @@ exports.takeAttendance = catchAsync(async (req, res, next) => {
   }
 
   // generate qr code  :
+  const expirationTime = Date.now() + 10000; // 10 ثوانٍ بالمللي ثانية
 
-  // const qrData = `${courseId}${lectureId}`;
-  // const qrCode = await qrGenerator(qrData);
+
+  const qrData = `${courseId}${lectureId}${expirationTime}`;
+  const qrCode = await qrGenerator(qrData);
+  
 
   // sending response to the client
   res.status(201).json({
     status: 'success',
     message: 'you can display qr code for students now',
-    // data: {
-    //   qrCode,
-    // },
+    data: {
+      qrCode,
+    }
   });
+  
+
 });
+
+
 
 // 2) scan qr
 
@@ -118,7 +125,18 @@ exports.scan = catchAsync(async (req, res, next) => {
   // student must be authenticated to use this endpoint :
   const { qrData } = req.body;
   const studentId = req.student._id;
-  const attendanceToken = `${qrData}${studentId}`;
+  const expirationTime = parseInt(qrData.slice(-13)); // افتراض أن الوقت في النهاية
+  const currentTimestamp = Date.now();
+
+  // التحقق مما إذا كان الوقت المحفوظ مع الـ QR code قد انتهى
+  if (currentTimestamp > expirationTime) {
+    return next(
+      new apiError('انتهت صلاحية رمز الاستجابة السريعة', 400)
+    );
+  }
+  const qrDataWithoutExpiration = qrData.slice(0, -13);
+
+  const attendanceToken = `${qrDataWithoutExpiration}${studentId}`;
 
   const attendanceRecord = await Attendance.findOne({ attendanceToken });
   if (!attendanceRecord) {

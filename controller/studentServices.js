@@ -188,7 +188,6 @@ exports.updateLoggedStuData = asyncHandler(async (req, res, next) => {
     },
     { new: true }
   );
-  console.log(req.student._id);
 
   res.status(200).json({ data: student });
 });

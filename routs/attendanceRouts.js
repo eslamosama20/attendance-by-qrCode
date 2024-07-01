@@ -15,6 +15,7 @@ const {
   getCourseAttendance,
   getLectureAttendance,
   getStudentAttendanceInCourse,
+
   
 } = require("../controller/attendanceServices");
 
@@ -25,10 +26,12 @@ const router = express.Router({ mergeParams: true });
 // 1) take attendance route
 router.post(
   "/takeAttendance/:courseId/:lectureId",
-  authServicesForLec.protect,
-  authServicesForLec.allowedTo("manager"),
+  // authServicesForLec.protect,
+  // authServicesForLec.allowedTo("manager"),
   takeAttendance
 );
+
+
 
 // 2) get course attendance :
 
