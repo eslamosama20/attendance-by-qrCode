@@ -33,5 +33,6 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "description": ""
+  "description": "",
+  "engines":{ "node": "^18.16.1"}
 }

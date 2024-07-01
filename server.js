@@ -24,6 +24,7 @@ dbConnection();
 // express app
 const app = express();
 app.use(cors());
+app.options('*', cors());
 // middleWares
 app.use(express.json());
 if (process.env.NODE_ENV === 'development') {
