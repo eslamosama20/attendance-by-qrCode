@@ -39,7 +39,6 @@ exports.login = asyncHandler(async (req, res, next) => {
 
 // @desc   make sure the lecturer is logged in
 exports.protect = asyncHandler(async (req, res, next) => {
-  // 1) Check if token exist, if exist get
   let token;
   if (
     req.headers.authorization &&
@@ -50,27 +49,25 @@ exports.protect = asyncHandler(async (req, res, next) => {
   if (!token) {
     return next(
       new ApiError(
-        'You are not login, Please login to get access this route',
+        'You are not logged in, Please login to get access to this route',
         401
       )
     );
   }
 
-  // 2) Verify token (no change happens, expired token)
   const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY);
   console.log(decoded);
 
-  // 3) Check if user exists
   const currentLecturer = await lecturer.findById(decoded.lecturerId);
   if (!currentLecturer) {
     return next(
       new ApiError(
-        'The lecturer that belong to this token does no longer exist',
+        'The lecturer that belongs to this token no longer exists',
         401
       )
     );
   }
-  // 4)check if lecturer change password after the token was issued
+
   if (currentLecturer.passwordChangedAt) {
     const passChangedTimesTAmp = parseInt(
       currentLecturer.passwordChangedAt.getTime() / 1000,
@@ -79,24 +76,39 @@ exports.protect = asyncHandler(async (req, res, next) => {
     if (passChangedTimesTAmp > decoded.iat) {
       return next(
         new ApiError(
-          'user recently changed his pssword ,please login again.. ',
+          'User recently changed their password, please login again.',
           401
         )
       );
     }
   }
+
+  // تأكد من أن currentLecturer يحتوي على role
+  if (!currentLecturer.role) {
+    return next(
+      new ApiError(
+        'User does not have a role assigned',
+        403
+      )
+    );
+  }
+
   req.lecturer = currentLecturer;
   next();
 });
 
+
 // @ desc Authorization (lecturers permission)
 exports.allowedTo = (...roles) =>
   asyncHandler(async (req, res, next) => {
-    // 1)access rule
-    // 2)access registred lec(req.lecturer.role)
+    if (!req.lecturer || !req.lecturer.role) {
+      return next(
+        new ApiError('Lecturer information is missing or incomplete', 400)
+      );
+    }
     if (!roles.includes(req.lecturer.role)) {
       return next(
-        new ApiError('you are not allowed to access this route', 403)
+        new ApiError('You are not allowed to access this route', 403)
       );
     }
     next();
