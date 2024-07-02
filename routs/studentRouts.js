@@ -113,7 +113,7 @@ router
   .route("/search/:keyword")
   .get(
     authServicesForStu.protect,
-    authServicesForStu.allowedTo("admin"),
+    // authServicesForStu.allowedTo("admin"),
     searchForStudent
   );
 module.exports = router;

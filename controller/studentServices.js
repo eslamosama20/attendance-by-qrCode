@@ -108,7 +108,8 @@ exports.getCoursesForStudent = asyncHandler(async (req, res) => {
 
   // جلب أسماء الكورسات فقط
   const courses = student.courses.map(course => ({
-    name: course.name,
+    id: course._id,
+    name: course.name
   }));
 
   res.status(200).json({

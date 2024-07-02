@@ -23,13 +23,24 @@ exports.signup = asyncHandler(async (req, res, next) => {
 exports.login = asyncHandler(async (req, res, next) => {
   // check if password and email in the body
   // check if password and email are correct
+//   if (
+//     !foundLecturer ||
+//     !(await bcrypt.compare(req.body.password, foundLecturer.password))
+//   ) {
+//     return next(new ApiError('Invalid email or password', 401));
+//   }
+//   // genrate token
+//   const token = createToken(foundLecturer._id);
+//   // send response to client
+//   res.status(200).json({ data: foundLecturer, token });
+// });
   const foundStudent = await student.findOne({ email: req.body.email });
   if (
-    !foundStudent ||
-    !(await bcrypt.compare(req.body.password, foundStudent.password))
-  ) return res.status(401).json({ message: 'incorrect email or password' ,data:null
-    
-  });
+        !foundLecturer ||
+        !(await bcrypt.compare(req.body.password, foundLecturer.password))
+      ) {
+        return next(new ApiError('Invalid email or password', 401));
+      }
   // genrate token
   const token = createToken(foundStudent._id);
   // send response to client
@@ -128,12 +139,19 @@ exports.forgetPassword = asyncHandler(async (req, res, next) => {
 
   // 3) Send the reset code via email
   const message = `Hi ${foundStudent.name},\n We received a request to reset the password on your Attendenceapp Account. \n ${resetCode} \n Enter this code to complete the reset. \n Thanks for helping us keep your account secure.\n The E-shop Team`;
-
+try{
   await sendEmail({
     email: foundStudent.email,
     subject: 'Your password reset code (valid for 10 min)',
     message,
   });
+}catch (err) {
+  foundLecturer.passwordRessetCode = undefined;
+  foundLecturer.passwordRessetExpires = undefined;
+  foundLecturer.passwordResetVerified = undefined;
+  await foundLecturer.save();
+  return next(new ApiError('There is an error in sending email', 500));
+}
 
   res
     .status(200)

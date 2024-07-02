@@ -120,8 +120,8 @@ exports.forgetPassword = asyncHandler(async (req, res, next) => {
     .createHash('sha256')
     .update(resetCode)
     .digest('hex');
-  console.log(resetCode);
-  console.log(HashedRestCode);
+  // console.log(resetCode);
+  // console.log(HashedRestCode);
 
   // Save hashed password reset code into db
   foundLecturer.passwordRessetCode = HashedRestCode;

@@ -85,9 +85,9 @@ exports.deleteLecturerValidator = [
   validatorMiddleWare,
 ];
 exports.changeLecturerPasswordValidator = [
-  check('currentPassword')
-    .notEmpty()
-    .withMessage('you must enter currentPassword'),
+  // check('currentPassword')
+  //   .notEmpty()
+  //   .withMessage('you must enter currentPassword'),
 
   check('confirmPassword')
     .notEmpty()
@@ -104,13 +104,13 @@ exports.changeLecturerPasswordValidator = [
           throw new Error('There is no user for the provided id');
         }
 
-        const isCorrect = await bcrypt.compare(
-          req.body.currentPassword,
-          lecturertInstance.password
-        );
-        if (!isCorrect) {
-          throw new Error('Incorrect Current Password');
-        }
+        // const isCorrect = await bcrypt.compare(
+        //   req.body.currentPassword,
+        //   lecturertInstance.password
+        // );
+        // if (!isCorrect) {
+        //   throw new Error('Incorrect Current Password');
+        // }
 
         // 2) Verify confirm password
         if (val !== req.body.confirmPassword) {

@@ -16,6 +16,8 @@ exports.createStudentValidator = [
     .withMessage('TO SHORT User NAME'),
   check('programme').notEmpty().withMessage('programme IS REQUIRED'),
   check('courses').notEmpty().withMessage('courses IS REQUIRED'),
+  check('level').notEmpty().withMessage('level IS REQUIRED'),
+
   check('email')
     .notEmpty()
     .withMessage('Email IS REQUIRED')

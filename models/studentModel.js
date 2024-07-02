@@ -48,7 +48,8 @@ const studentSchema = new mongoose.Schema(
     },
     level: {
       type: String,
-      required: [true, 'level is required'],
+      // required: [true, 'level is required'],
+
     },
     courses: [
       {
