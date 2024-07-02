@@ -197,7 +197,7 @@ exports.updateLoggedStuData = asyncHandler(async (req, res, next) => {
 // @route   DELETE /api/v1/student/deleteMe
 // @access  Private/Protect
 exports.deleteLoggedStuData = asyncHandler(async (req, res, next) => {
-  await studentModel.findByIdAndUpdate(req.student._id, { active: false });
+  await studentModel.findByIdAndDelete(req.student._id, { active: false });
 
   res.status(204).json({ status: 'Success' });
 });

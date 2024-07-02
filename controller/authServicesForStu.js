@@ -36,8 +36,8 @@ exports.login = asyncHandler(async (req, res, next) => {
 // });
   const foundStudent = await student.findOne({ email: req.body.email });
   if (
-        !foundLecturer ||
-        !(await bcrypt.compare(req.body.password, foundLecturer.password))
+        !foundStudent ||
+        !(await bcrypt.compare(req.body.password, foundStudent.password))
       ) {
         return next(new ApiError('Invalid email or password', 401));
       }

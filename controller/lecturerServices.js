@@ -86,7 +86,7 @@ exports.deleteSpecificLecturer = factory.deleteOne(lecturerModel);
 
 exports.searchForLecturer = factory.search(lecturerModel);
 exports.changeLecturerPassword = asyncHandler(async (req, res, next) => {
-  const doc = await lecturerModel.findByIdAndUpdate(
+  const doc = await lecturerModel.findByIdAndDelete(
     req.params.id,
     {
       password: await bcrypt.hash(req.body.password, 12),
