@@ -23,18 +23,16 @@
     "start:dev": "nodemon index.js",
     "start:prod": "set NODE_ENV=production && node index.js",
     "start": "nodemon index.JS"
-
   },
   "name": "nodejs-attendance-marking-using-qrcode-master-api-v",
   "version": "1.0.0",
   "main": "index.js",
-  "engines":{ "node": "14.x"},
-
   "devDependencies": {
     "nodemon": "^3.0.3"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "description": ""
+  "description": "",
+  "engines":{ "node": "^18.16.1"}
 }
