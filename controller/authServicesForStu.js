@@ -1,6 +1,6 @@
 const asyncHandler = require('express-async-handler');
 const ApiError = require('../utils/apiError');
-const studentModel = require('../models/studentModel');
+const student = require('../models/studentModel');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const crypto = require('crypto');
@@ -13,7 +13,7 @@ const createToken = (payload) =>
 
 exports.signup = asyncHandler(async (req, res, next) => {
   // 1) create student
-  const foundStudent = await studentModel.create(req.body);
+  const foundStudent = await student.create(req.body);
   // 2) generate jwt (token)
   const token = createToken(foundStudent._id);
   res.status(201).json({ data: foundStudent, token });
