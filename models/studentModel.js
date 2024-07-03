@@ -11,7 +11,6 @@ const studentSchema = new mongoose.Schema(
     name: {
       type: String,
       required: [true, 'name is required'],
-      // unique:[true,'the name must be unique'],
       minLength: [3, 'name must be at least 3 characters'],
       maxLength: [100, 'name is too long'],
     },
@@ -41,24 +40,31 @@ const studentSchema = new mongoose.Schema(
       type: Boolean,
       default: true,
     },
-    // A and B =>shopping.com/a-and-b
     programme: {
       type: String,
       required: [true, 'programme is required'],
     },
     level: {
       type: String,
-
     },
-    courses: [
-      {
-        type: mongoose.Schema.ObjectId,
-        ref: 'course',
-      },
-    ],
+    courses: {
+      type: [
+        {
+          type: mongoose.Schema.ObjectId,
+          ref: 'course',
+        },
+      ],
+      required: [true, 'courses are required'],
+      validate: [arrayLimit, 'courses cannot be empty'],
+    },
   },
   { timestamps: true }
 );
+
+function arrayLimit(val) {
+  return val.length > 0;
+}
+
 studentSchema.pre(/^find/, function (next) {
   this.populate({
     path: 'courses',
@@ -87,6 +93,7 @@ studentSchema.pre('save', async function (next) {
   this.password = await bcrypt.hash(this.password, 12);
   next();
 });
+
 // 2-create model
 const StudentModel = mongoose.model('student', studentSchema);
 module.exports = StudentModel;
