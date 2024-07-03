@@ -96,7 +96,7 @@ exports.getCoursesForStudent = asyncHandler(async (req, res) => {
   // استرجاع الطالب باستخدام معرف الطالب
   const student = await studentModel
     .findById(studentId)
-    .populate({ path: "courses", select: "name -_id" }); // جلب أسماء الكورسات فقط
+    .populate({ path: "courses", select: "name _id" }); // جلب أسماء الكورسات فقط
 
   // التحقق مما إذا كان الطالب موجود
   if (!student) {

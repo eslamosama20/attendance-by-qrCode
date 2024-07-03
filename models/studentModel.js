@@ -48,7 +48,6 @@ const studentSchema = new mongoose.Schema(
     },
     level: {
       type: String,
-      // required: [true, 'level is required'],
 
     },
     courses: [
@@ -63,7 +62,7 @@ const studentSchema = new mongoose.Schema(
 studentSchema.pre(/^find/, function (next) {
   this.populate({
     path: 'courses',
-    select: 'name-_id',
+    select: 'name _id',
   });
   next();
 });
