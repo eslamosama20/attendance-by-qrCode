@@ -9,67 +9,7 @@ const Course = require('./../models/coursesModel');
 const Attendance = require('./../models/attendanceModel');
 const Lecture = require('./../models/lectureModel');
 const qrGenerator = require('./../utils/qrCodeGenerator');
-// exports.setStudentIDToBody=(req,res,next)=>{
-//     if(!req.body.student) req.body.student=req.params.studentId
-//     next()
-// }
-// exports.createFilterStuObj=(req, res, next)=>{
-//     let filterObj={}
-//     if(req.params.studentId) filterObj={student : req.params.studentId}
-//     req.filterObj=filterObj
-//     next()
-// }
-// exports.setCoursesIDToBody = (req, res, next) => {
-//   if (!req.body.courses) req.body.courses = req.params.coursesId;
-//   next();
-// };
 
-// exports.createFilterObj = (req, res, next) => {
-//   let filterObj = {};
-//   if (req.params.coursesId) filterObj = { courses: req.params.coursesId };
-//   req.filterObj = filterObj;
-//   next();
-// };
-
-// @desc get all students
-// @route /api/v1/students
-// @ access public
-// exports.getAttendance = asyncHandler(async (req, res) => {
-//   const countDocuments = await attendanceModel.countDocuments();
-//   const apiFeatures = new ApiFeatures(attendanceModel.find(), req.query)
-//     .paginate(countDocuments)
-//     .filter()
-//     .limitFields()
-//     .sort();
-//   //execute query
-//   const { mongooseQuery, paginationResult } = apiFeatures;
-//   const attendance = await mongooseQuery;
-
-//   res.status(200).json({
-//     results: attendance.length,
-//     status: 'success',
-//     paginationResult,
-//     data: attendance,
-//   });
-// });
-
-// // @desc create student
-// // @route /api/v1/student
-// // @ access private
-// exports.createAttendance = factory.createOne(attendanceModel);
-// // @desc get specificBy id student
-// // @route /api/v1/student/:id
-// // @ access public
-// exports.getoneAttendance = factory.getOne(attendanceModel);
-// // @desc get specificBy id student to view his courses
-// // @route /api/v1/studentcourses/:id
-// // @ access public
-
-// exports.updateSpecificattendance = factory.updateOne(attendanceModel);
-// // @desc delete specificBy id student
-// // @route /api/v1/student/:id
-// // @ access private
-// exports.deleteSpecificattendance = factory.deleteOne(attendanceModel);
 
 //////////////////////////////////////// attendance controllers 😜 ///////////////////////////////////////////////
 
@@ -98,11 +38,10 @@ exports.takeAttendance = catchAsync(async (req, res, next) => {
   }
 
   // generate qr code  :
-  // const expirationTime = Date.now() + 10000; // 10 ثوانٍ بالمللي ثانية
+  const expirationTime = Date.now() + 10000; // 10 ثوانٍ بالمللي ثانية
 
 
-  const qrData = `${courseId}${lectureId}`
-  // ${expirationTime};
+  const qrData = `${courseId}${lectureId}${expirationTime}`;
   const qrCode = await qrGenerator(qrData);
   
 
@@ -125,18 +64,18 @@ exports.scan = catchAsync(async (req, res, next) => {
   // student must be authenticated to use this endpoint :
   const { qrData } = req.body;
   const studentId = req.student._id;
-  // const expirationTime = parseInt(qrData.slice(-13)); // افتراض أن الوقت في النهاية
+  const expirationTime = parseInt(qrData.slice(-13)); // افتراض أن الوقت في النهاية
   const currentTimestamp = Date.now();
 
   // التحقق مما إذا كان الوقت المحفوظ مع الـ QR code قد انتهى
-  // if (currentTimestamp > expirationTime) {
-  //   return next(
-  //     new apiError('انتهت صلاحية رمز الاستجابة السريعة', 400)
-  //   );
-  // }
-  // const qrDataWithoutExpiration = qrData.slice(0, -13);
+  if (currentTimestamp > expirationTime) {
+    return next(
+      new apiError('انتهت صلاحية رمز الاستجابة السريعة', 400)
+    );
+  }
+  const qrDataWithoutExpiration = qrData.slice(0, -13);
 
-  const attendanceToken = `${qrData}${studentId}`;
+  const attendanceToken = `${qrDataWithoutExpiration}${studentId}`;
 
   const attendanceRecord = await Attendance.findOne({ attendanceToken });
   if (!attendanceRecord) {
