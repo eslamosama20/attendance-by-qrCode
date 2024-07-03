@@ -12,28 +12,16 @@ const createToken = (payload) =>
   });
 
 exports.signup = asyncHandler(async (req, res, next) => {
-  //1) create foundStudent
-  const foundStudent = await student.create(req.body);
-  // generate jwt (token)
+  // 1) create student
+  const foundStudent = await studentModel.create(req.body);
+  // 2) generate jwt (token)
   const token = createToken(foundStudent._id);
   res.status(201).json({ data: foundStudent, token });
 });
 
 
 exports.login = asyncHandler(async (req, res, next) => {
-  // check if password and email in the body
-  // check if password and email are correct
-//   if (
-//     !foundLecturer ||
-//     !(await bcrypt.compare(req.body.password, foundLecturer.password))
-//   ) {
-//     return next(new ApiError('Invalid email or password', 401));
-//   }
-//   // genrate token
-//   const token = createToken(foundLecturer._id);
-//   // send response to client
-//   res.status(200).json({ data: foundLecturer, token });
-// });
+ 
   const foundStudent = await student.findOne({ email: req.body.email });
   if (
         !foundStudent ||
